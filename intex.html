@@ -1,1 +1,480 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBML Red Flags Repository</title>
+    <style>
+        :root {
+            --color-bg-primary: #0a0a0a;
+            --color-bg-secondary: #1a1a1a;
+            --color-bg-card: #2a2a2a;
+            --color-red-primary: #dc2626;
+            --color-red-hover: #b91c1c;
+            --color-red-light: rgba(220, 38, 38, 0.1);
+            --color-white: #ffffff;
+            --color-gray-100: #f5f5f5;
+            --color-gray-300: #d1d5db;
+            --color-gray-400: #9ca3af;
+            --color-gray-600: #4b5563;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-bg-primary);
+            color: var(--color-white);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            border-bottom: 3px solid var(--color-red-primary);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-logo {
+            max-height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: var(--color-red-primary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background-color: var(--color-bg-secondary);
+            border: 2px solid var(--color-gray-600);
+            border-radius: 8px;
+            color: var(--color-white);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--color-red-primary);
+            box-shadow: 0 0 0 3px var(--color-red-light);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.25rem;
+            background-color: var(--color-bg-secondary);
+            border: 2px solid var(--color-gray-600);
+            border-radius: 8px;
+            color: var(--color-white);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--color-red-primary);
+            background-color: var(--color-red-light);
+        }
+
+        .filter-btn.active {
+            background-color: var(--color-red-primary);
+            border-color: var(--color-red-primary);
+            color: var(--color-white);
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: var(--color-bg-secondary);
+            border: 2px solid var(--color-gray-600);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-red-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: var(--color-gray-300);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .red-flags-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .red-flag-card {
+            background-color: var(--color-bg-card);
+            border: 2px solid var(--color-gray-600);
+            border-left: 5px solid var(--color-red-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .red-flag-card:hover {
+            border-color: var(--color-red-primary);
+            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .red-flag-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .flag-number {
+            background-color: var(--color-red-primary);
+            color: var(--color-white);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .category-badge {
+            background-color: var(--color-bg-secondary);
+            color: var(--color-red-primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid var(--color-red-primary);
+        }
+
+        .red-flag-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--color-white);
+            margin-bottom: 1rem;
+        }
+
+        .red-flag-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .red-flag-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-label {
+            color: var(--color-red-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-content {
+            color: var(--color-gray-300);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .expanded .section-content {
+            margin-bottom: 1rem;
+        }
+
+        .collapsed .red-flag-section:not(:first-child) {
+            display: none;
+        }
+
+        .expand-indicator {
+            color: var(--color-gray-400);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--color-gray-400);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://www.dropbox.com/scl/fi/xm8s4e76s9k0yap5xuqbu/M-1.png?rlkey=k2c5tclompg1k2q815zmi52w0&st=9jf2263g&raw=1" alt="Logo" class="logo">
+        <h1>TBML Red Flags Repository</h1>
+        <div class="subtitle">Trade-Based Money Laundering Detection Framework</div>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="totalFlags">67</div>
+                <div class="label">Total Red Flags</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="visibleFlags">67</div>
+                <div class="label">Currently Visible</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">6</div>
+                <div class="label">Categories</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search red flags by keyword...">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" data-category="all">All Categories</button>
+                <button class="filter-btn" data-category="1">Corporate (1-15)</button>
+                <button class="filter-btn" data-category="2">Payment (16-28)</button>
+                <button class="filter-btn" data-category="3">Trade (29-40)</button>
+                <button class="filter-btn" data-category="4">Documentation (41-53)</button>
+                <button class="filter-btn" data-category="5">Jurisdictional (54-60)</button>
+                <button class="filter-btn" data-category="6">Typologies (61-67)</button>
+            </div>
+        </div>
+
+        <div class="red-flags-grid" id="redFlagsContainer"></div>
+        <div class="no-results" id="noResults" style="display: none;">No red flags match your search criteria.</div>
+    </div>
+
+    <script>
+        const redFlags = [
+            { num: 1, category: 1, categoryName: "Corporate Structure", title: "Unusually complex corporate structure", description: "Multiple shell companies layered across jurisdictions to obscure beneficial ownership and control.", detection: "Graph analytics mapping ownership connections, entity resolution linking shared addresses/agents, automated beneficial ownership tracing.", evasion: "Use trusts and foundations in jurisdictions without public registries. Layer through countries with data privacy laws that block automatic data exchange. Employ professional nominees not captured in standard corporate databases." },
+            { num: 2, category: 1, categoryName: "Corporate Structure", title: "Registered at a mass address", description: "Multiple entities registered at the same virtual office or PO box address.", detection: "Address clustering algorithms flagging 10+ entities at same address, geospatial analysis comparing to business operations, physical verification triggers.", evasion: "Use multiple different mass addresses across different formation agents, staying just under threshold per address. Combine with residential addresses of nominees to scatter registration points." },
+            { num: 3, category: 1, categoryName: "Corporate Structure", title: "Residential address for a trading entity", description: "Trading company registered at residential apartment, avoiding commercial premises.", detection: "Address type classification (residential vs. commercial), cross-reference utility records, risk scoring for residential-based traders handling $1M+.", evasion: "Register at mixed-use building containing both residential and commercial units. Use commercial registered agent service that provides physical street address but forwards mail." },
+            { num: 4, category: 1, categoryName: "Corporate Structure", title: "Dormant company suddenly activates", description: "Shelf company with clean history acquired and activated after period of dormancy.", detection: "Historical transaction analysis (12-24 month baseline), dormancy detection flagging 6+ months inactivity then high volume, EDD triggers requiring source of funds.", evasion: "Use company that was minimally active not completely dormant. Stage activation over several months with increasing transaction sizes to appear as organic growth." },
+            { num: 5, category: 1, categoryName: "Corporate Structure", title: "Nominee directors or shareholders", description: "Individuals recruited as nominal directors while true controllers remain hidden.", detection: "Cross-directorship analysis identifying individuals with 20+ directorships, demographic profiling (age/location mismatches), public record correlation.", evasion: "Use different nominees for each company with no other directorships. Ensure nominees have plausible demographics matching the business. Pay nominees to maintain basic online presence." },
+            { num: 6, category: 1, categoryName: "Corporate Structure", title: "Minimal staff vs. trade volume", description: "Shell operation with no or minimal employees, using enablers for paperwork.", detection: "Payroll analysis comparing employee count/reported wages to transaction volume, industry benchmarking, site visit triggers for <3 employees with $10M+ trade.", evasion: "Employ small number of staff (3-5) as contractors to create payroll footprint. Outsource functions to third-party service providers. Keep trade volume just under $10M threshold." },
+            { num: 7, category: 1, categoryName: "Corporate Structure", title: "Name mimics a well-known corporation", description: "Company named to resemble legitimate multinational, hoping screening misses difference.", detection: "Fuzzy matching algorithms (Levenshtein distance) flagging 80%+ similarity to known entities, manual review of variations.", evasion: "Use generic terms applicable to many businesses rather than direct variations. Incorporate in jurisdictions where legitimate company has no trademark protection." },
+            { num: 8, category: 1, categoryName: "Corporate Structure", title: "No digital footprint or boilerplate site", description: "Minimal online presence—no website or template site only.", detection: "Automated web scraping for corporate websites, website quality analysis flagging templates, business verification through third-party data.", evasion: "Create professional-looking website with unique content. Use freelance web designers to build custom site. Maintain social media profiles with regular posts. Register domain well in advance (1-2 years)." },
+            { num: 9, category: 1, categoryName: "Corporate Structure", title: "High-risk jurisdiction registration", description: "Incorporation in FATF grey-list countries or secrecy havens.", detection: "Jurisdiction risk scoring based on FATF lists, geographic transaction monitoring, enhanced screening for all counterparties in such locations.", evasion: "Incorporate in lower-risk jurisdiction offering some opacity (certain US states, European countries not on FATF lists). Use two-tier structure with shell in high-risk jurisdiction but trading entity in moderate-risk country." },
+            { num: 10, category: 1, categoryName: "Corporate Structure", title: "Shared owners across unrelated entities", description: "Multiple seemingly independent companies controlled through common ownership.", detection: "Network graph analysis visualizing connections through shared UBOs/directors, community detection algorithms identifying clusters.", evasion: "Use different nominees for each company so ownership appears unrelated. Create trust structures where beneficiary is not direct owner. Avoid transactions between companies that reveal connections." },
+            { num: 11, category: 1, categoryName: "Corporate Structure", title: "Use of front companies", description: "Cash-intensive business operated to commingle illicit cash with legal revenue.", detection: "Cash flow analysis comparing declared cash revenue to industry norms, point-of-sale data integration, tax return comparison, industry benchmarking.", evasion: "Choose front business with high cash variability where revenue fluctuations are normal. Inflate reported cash revenue gradually. Use multiple front businesses to spread deposits." },
+            { num: 12, category: 1, categoryName: "Corporate Structure", title: "Links to Politically Exposed Persons (PEPs)", description: "Partnership with or bribing PEPs to facilitate trade operations.", detection: "Automated PEP screening against global databases, negative news monitoring, source of wealth analysis, transaction monitoring for unusual patterns involving PEP accounts.", evasion: "Use family members or close associates of PEPs rather than PEP directly. Ensure PEP's involvement is indirect through companies they influence but don't own. Use offshore accounts obscuring connection." },
+            { num: 13, category: 1, categoryName: "Corporate Structure", title: "Recent changes in directorship", description: "Last-minute director changes before high-value transactions to obscure true controllers.", detection: "Temporal analysis of corporate registry changes relative to transaction dates, pattern detection flagging changes within 30 days of major transactions, UBO verification.", evasion: "Make director changes well in advance (3-6 months) of planned transactions. If unavoidable, accompany with plausible business reason and supporting documentation." },
+            { num: 14, category: 1, categoryName: "Corporate Structure", title: "Operations in Free Trade Zones (FTZs)", description: "Routing goods through FTZs to exploit lighter oversight.", detection: "Geographic routing analysis flagging unnecessary FTZ involvement, transaction monitoring for patterns of FTZ usage, customs data integration.", evasion: "Ensure FTZ usage has plausible economic rationale (warehousing, assembly, repackaging) and document it. Use FTZs with better oversight. Mix FTZ transactions with direct shipments." },
+            { num: 15, category: 1, categoryName: "Corporate Structure", title: "Professional enablers as a shield", description: "Using lawyers/accountants as intermediaries, making direct engagement difficult.", detection: "Third-party relationship monitoring tracking engagements with known enabler firms, correspondent banking due diligence, enhanced disclosure requirements demanding UBO identification.", evasion: "Use different enablers for different parts of scheme so no single enabler has full picture. Choose enablers in jurisdictions with strong professional secrecy laws." },
+            { num: 16, category: 2, categoryName: "Payment Behavior", title: "Third-party payments with no rationale", description: "Payment arranged from unrelated entity to break paper trail.", detection: "Payment pattern analysis identifying payer name mismatches, network analytics mapping flows between unrelated entities, triggered inquiries for third-party payments.", evasion: "Ensure third party has contractual relationship with buyer or seller, even if fabricated. Use third parties that are related but not obviously so." },
+            { num: 17, category: 2, categoryName: "Payment Behavior", title: "Payments structured below reporting thresholds", description: "Large cash deposits broken into amounts just under $10,000 to avoid CTR.", detection: "Aggregation algorithms combining related transactions within rolling windows (24h, 7d), branch-crossing analysis, behavioral analytics flagging consistent just-below-threshold amounts.", evasion: "Use multiple accounts at different banks. Vary amounts to avoid consistent pattern. Make deposits at different times and branches. Spread deposits over weeks." },
+            { num: 18, category: 2, categoryName: "Payment Behavior", title: "Last-minute changes to payment instructions", description: "Beneficiary details changed just before transfer, hoping bank processes without verification.", detection: "Payment instruction monitoring flagging changes within 24 hours of execution, risk-based holds requiring verification, pattern detection for repeated changes.", evasion: "Make changes slightly earlier (48 hours) to avoid 24-hour flag. Provide credible reason with supporting documentation. Avoid repeated changes with same counterparty." },
+            { num: 19, category: 2, categoryName: "Payment Behavior", title: "Rapid pass-through account activity", description: "Funds arrive and depart almost immediately, with balances rarely staying overnight.", detection: "Velocity analysis calculating average holding period, dwell time monitoring flagging 80%+ funds exit within 24 hours, balance pattern analysis identifying near-zero end-of-day balances.", evasion: "Keep minimum balance in account at all times (10-20% of throughput). Stagger inflows and outflows so not all funds exit within 24 hours." },
+            { num: 20, category: 2, categoryName: "Payment Behavior", title: "Circular payments", description: "Funds move through multiple entities/countries in loop, returning to originator.", detection: "Transaction tracing following fund movements, circular flow detection algorithms identifying patterns where funds return to source within defined period, network visualization mapping cycles.", evasion: "Ensure loop is not closed quickly—extend time between outward and return payments to months. Use different accounts and currencies. Add intermediate transactions appearing legitimate." },
+            { num: 21, category: 2, categoryName: "Payment Behavior", title: "Payments in large, round numbers", description: "Round-number amounts used because precise pricing isn't needed.", detection: "Rounding analysis flagging transactions where amount modulo 1,000 = 0, expected value modeling comparing to statistically predicted figures, sector benchmarking.", evasion: "Use non-round numbers by adding small random variations. Calculate amounts based on plausible unit prices and quantities. Mimic real trade by including freight, insurance costs." },
+            { num: 22, category: 2, categoryName: "Payment Behavior", title: "High number of cash deposits", description: "Cash-intensive front business used to deposit cash, then wire it out.", detection: "Cash deposit monitoring analyzing frequency, amount patterns, branch locations, correlation analysis linking cash deposits to subsequent wire transfers, source of cash inquiries.", evasion: "Use multiple front businesses in different locations. Ensure cash deposits consistent with business hours and patterns. Mix cash deposits with electronic receipts. Delay wire transfers after deposits." },
+            { num: 23, category: 2, categoryName: "Payment Behavior", title: "Frequent LC amendments", description: "Repeated amendments to Letters of Credit as scheme evolves.", detection: "Amendment tracking monitoring frequency and nature, pattern analysis identifying amendments clustered around payment dates, reason code requirements.", evasion: "Limit amendments to one per LC with documented reason. Avoid amending beneficiary or goods—open new LC if major changes needed. Spread amendments across different banks." },
+            { num: 24, category: 2, categoryName: "Payment Behavior", title: "LC beneficiary too willing to waive discrepancies", description: "Beneficiary accepts documents with major discrepancies to get payment released.", detection: "Discrepancy waiver monitoring tracking instances where beneficiaries accept non-compliant documents, risk scoring elevating transactions where waivers occur repeatedly, benchmarking against peers.", evasion: "Accept only minor discrepancies that legitimate trader might also waive. If major discrepancies arise, negotiate price reduction or amendment. Provide business rationale for each waiver." },
+            { num: 25, category: 2, categoryName: "Payment Behavior", title: "Unused LCs", description: "Letters of Credit opened that expire unused, perhaps to test processes or create audit trail.", detection: "LC utilization tracking monitoring expiration rates, pattern detection identifying customers with high unused-to-used ratios, relationship review.", evasion: "Use LCs only when needed. If transaction falls through, cancel LC before expiry. Keep unused ratio low (e.g., <10%). If testing processes, use small amounts." },
+            { num: 26, category: 2, categoryName: "Payment Behavior", title: "Advance payments inconsistent with risk", description: "100% advance payment to new supplier in high-risk country.", detection: "Payment term analysis comparing to industry norms, risk-based scoring flagging full advance payments to first-time counterparties in high-risk locations, enhanced due diligence.", evasion: "Structure payment as partial advance (e.g., 50%) with remainder on documents. Use intermediary in lower-risk country to receive advance then pay supplier." },
+            { num: 27, category: 2, categoryName: "Payment Behavior", title: "Account shows spikes then dormancy", description: "Account used for short intense activity then abandoned.", detection: "Volume volatility analysis measuring standard deviation of monthly activity, change point detection identifying statistically significant shifts, pattern recognition for dormant-to-active-to-dormant cycles.", evasion: "Maintain low-level activity even during dormant periods. Gradually ramp up volume over several months. Use multiple accounts in rotation." },
+            { num: 28, category: 2, categoryName: "Payment Behavior", title: "Payments to/from gambling or betting sites", description: "Gambling platforms used to layer funds.", detection: "Merchant category code monitoring flagging gambling-related MCCs, correlation analysis linking gambling activity to trade payments, source of funds verification.", evasion: "Use cryptocurrency exchanges or online payment platforms not categorized as gambling. Ensure amounts are small and infrequent. Use peer-to-peer transfers. Layer through multiple accounts." },
+            { num: 29, category: 3, categoryName: "Trade Inconsistencies", title: "Trade inconsistent with business line", description: "Company registered for one industry suddenly trades completely different goods.", detection: "Industry code monitoring tracking SIC/NAICS codes against traded goods, pattern deviation analysis flagging transactions outside historical commodity types, business rationale inquiries.", evasion: "Register company with broader industry codes covering many sectors. Create subsidiary with appropriate code. Provide plausible diversification story. Start with small volumes in new sector." },
+            { num: 30, category: 3, categoryName: "Trade Inconsistencies", title: "Illogical shipping routes", description: "Goods shipped circuitously through multiple high-risk jurisdictions.", detection: "Route optimization analysis comparing actual to optimal routes, transshipment flagging identifying unnecessary stops in high-risk zones, vessel tracking integration.", evasion: "Ensure route has commercial justification (consolidation at hub, lack of direct services). Use well-known transshipment hubs. Avoid extremely circuitous routes." },
+            { num: 31, category: 3, categoryName: "Trade Inconsistencies", title: "Persistently low or negative profit margins", description: "Company consistently sells at or below cost, moving value through under-invoicing.", detection: "Margin analysis calculating profit/loss per transaction and over time, industry benchmarking, sustainability assessment.", evasion: "Ensure some transactions show normal margins to balance picture. If under-invoicing necessary, do sporadically. Maintain other income streams. Claim strategic loss-leader pricing." },
+            { num: 32, category: 3, categoryName: "Trade Inconsistencies", title: "Trade volume exceeds economic capacity", description: "Trade volume far beyond what balance sheet, credit lines, or capital would support.", detection: "Financial statement analysis comparing trade volume to reported assets/revenue/credit, leverage calculation measuring volume against net worth, credit facility monitoring.", evasion: "Inflate financial statements if possible. Use off-balance-sheet financing or third-party credit. Structure transactions so company acts as agent rather than principal." },
+            { num: 33, category: 3, categoryName: "Trade Inconsistencies", title: "Involvement of complex third-party chains", description: "Multiple intermediaries inserted with no added value.", detection: "Supply chain mapping identifying all parties, economic value analysis assessing each intermediary's contribution, relationship graphing.", evasion: "Ensure each intermediary has plausible role with documentation. Use intermediaries commonly used in that trade. Keep chain short (2-3 parties). Provide contracts showing responsibilities and fees." },
+            { num: 34, category: 3, categoryName: "Trade Inconsistencies", title: "Carousel transactions", description: "Same high-value commodity repeatedly imported and exported between same entities.", detection: "Commodity flow analysis tracking goods movements over time, pattern detection identifying repeated back-and-forth shipments, economic substance testing.", evasion: "Introduce variations in quantities, goods, ports. Ensure commercial reason for back-and-forth (processing, repackaging). Space transactions out over longer periods." },
+            { num: 35, category: 3, categoryName: "Trade Inconsistencies", title: "Use of high-risk commodities", description: "Goods inherently suited to TBML (gold, scrap, electronics).", detection: "Commodity risk scoring pre-classifying HS codes by TBML vulnerability, enhanced monitoring for high-risk commodity transactions, specialized valuation requiring third-party pricing.", evasion: "Mix high-risk commodities with low-risk goods in same shipment. Use standard industry practices for valuation. Ensure all documentation complete and consistent." },
+            { num: 36, category: 3, categoryName: "Trade Inconsistencies", title: "Shipment size mismatches container type", description: "Small consignment in full 40-ft container, or impossible weight.", detection: "Container utilization analysis comparing declared weight/volume to capacity, physical plausibility checks, logistics cost analysis.", evasion: "Ensure declared weight and volume plausible for container type. Declare additional low-value filler goods to occupy space. Use less-than-container-load (LCL) shipping for small consignments." },
+            { num: 37, category: 3, categoryName: "Trade Inconsistencies", title: "Goods inconsistent with origin/destination", description: "Advanced electronics shipped to country with no tech industry.", detection: "Economic profile integration using country-level import/export data, plausibility scoring comparing shipments to national trade patterns, anomaly detection.", evasion: "Ensure destination country has some relevant industry. Ship to free trade zone within country where goods may be re-exported. Use neighboring country with required industry as declared destination." },
+            { num: 38, category: 3, categoryName: "Trade Inconsistencies", title: "Exploitation of duty/VAT rebates", description: "Transactions designed to claim fraudulent VAT refunds.", detection: "Rebate claim analysis tracking frequency and patterns of duty/VAT recovery, cross-border matching comparing import and export declarations, beneficial ownership tracing.", evasion: "Ensure rebate claims within normal ranges for industry and country. Use genuine goods that physically move. Maintain meticulous records matching across jurisdictions." },
+            { num: 39, category: 3, categoryName: "Trade Inconsistencies", title: "Merchanting trade with no clear purpose", description: "Goods bought and sold between foreign countries without entering trader's home country.", detection: "Geographic flow analysis mapping merchanting trade patterns, economic rationale assessment requiring justification, counterparty screening for all parties.", evasion: "Provide clear commercial rationale (special expertise, relationships). Ensure all parties known and reputable. Document value added by trader. Use standard contracts." },
+            { num: 40, category: 3, categoryName: "Trade Inconsistencies", title: "Pressure tactics by the customer", description: "Customer becomes aggressive when asked for documentation.", detection: "Interaction logging documenting customer behavior patterns, escalation protocols requiring management review, relationship review for consistent pressure.", evasion: "Avoid overt pressure—be cooperative but evasive. Provide partial information, delay, claim difficulties. Use professional enablers to handle inquiries. Move business elsewhere if bank determined." },
+            { num: 41, category: 4, categoryName: "Documentation", title: "Vague or generic goods descriptions", description: "Non-specific terms used like 'electronic components'.", detection: "Natural language processing analyzing invoice descriptions for specificity, HS code validation, automated flagging of generic terms, LLM-based document analysis.", evasion: "Use moderately specific descriptions still vague enough to avoid screening. Ensure description matches HS code reasonably. Avoid overly generic terms like 'merchandise'." },
+            { num: 42, category: 4, categoryName: "Documentation", title: "Significant price deviation from market value", description: "Over- or under-invoicing by setting prices far from market rates.", detection: "Automated price benchmarking against external databases, tolerance band monitoring (e.g., ±30%), historical price analysis, real-time pricing APIs.", evasion: "Keep deviations within tolerance bands (20-25%). Use quality differences to justify variations. Provide supporting documents. Spread deviations across multiple transactions." },
+            { num: 43, category: 4, categoryName: "Documentation", title: "Obvious misclassification of goods", description: "Deliberately assigning wrong HS code.", detection: "AI-based HS code validation generating expected codes from descriptions, duty rate analysis flagging unusually low rates, export control screening.", evasion: "Choose HS code close to correct one but with different duty rate. Ensure description consistent with chosen code. Avoid obviously mismatched codes." },
+            { num: 44, category: 4, categoryName: "Documentation", title: "Falsified or counterfeit documents", description: "Altering or forging trade documents.", detection: "Document forensics using AI to detect alterations, cross-document validation, blockchain verification, secure feature checks.", evasion: "Use high-quality forgeries replicating security features. Ensure all documents in set consistent. Obtain genuine documents from complicit party and alter subtly. Use digital documents harder to forensically analyze." },
+            { num: 45, category: 4, categoryName: "Documentation", title: "Simple contracts for complex deals", description: "Basic template contracts for multi-million dollar deals.", detection: "Contract complexity scoring based on length, clauses, specificity, industry benchmarking, legal review triggers.", evasion: "Use more detailed contracts with several pages of standard terms. Include specific clauses. Make contract look professionally drafted with defined terms, signatures, dates." },
+            { num: 46, category: 4, categoryName: "Documentation", title: "Duplicate or multiple invoicing", description: "Presenting same shipment documents to multiple banks.", detection: "Invoice fingerprinting creating unique identifiers, cross-institution data sharing, pattern detection for similar invoices, blockchain-based platforms.", evasion: "Use slightly different invoices for each bank—change date, invoice number, minor details. Submit to banks in different countries with limited data sharing." },
+            { num: 47, category: 4, categoryName: "Documentation", title: "Phantom shipments", description: "Creating documents for non-existent goods.", detection: "Logistics data integration (shipping records, port manifests), vessel tracking, physical inspection triggers, insurance verification.", evasion: "Use real vessels and ports matching actual sailings even if goods aren't on board. Obtain genuine bills of lading from complicit freight forwarder. Purchase real insurance policy." },
+            { num: 48, category: 4, categoryName: "Documentation", title: "Inconsistent documents", description: "Mismatched details across invoice, bill of lading, packing list.", detection: "Automated cross-document validation comparing all key fields, tolerance thresholds for discrepancies, pattern analysis for high inconsistency rates.", evasion: "Ensure all documents consistent before submission. Use single source for data entry. If discrepancies occur, correct before presentation. If detected, claim clerical error." },
+            { num: 49, category: 4, categoryName: "Documentation", title: "Bill of lading discrepancies", description: "BL route or terms contradict LC, or shipper details mismatch.", detection: "LC vs. BL comparison, shipper-beneficiary matching, route verification against vessel tracking, BL authenticity checks.", evasion: "Ensure BL fully compliant with LC terms before presentation. Process amendments before shipment. Verify shipper name matches beneficiary exactly." },
+            { num: 50, category: 4, categoryName: "Documentation", title: "Packaging inconsistent with goods", description: "Declared packaging method inconsistent with goods type.", detection: "Packaging plausibility checks comparing declared packaging to goods type, industry norms benchmarking, logistics expert review.", evasion: "Use standard packaging for goods type. Ensure packing list matches packaging. If unusual packaging necessary, provide justification." },
+            { num: 51, category: 4, categoryName: "Documentation", title: "Absence of required licenses", description: "Shipping dual-use or controlled goods without proper licenses.", detection: "Automated license screening checking goods against controlled items lists, regulatory database integration, end-user verification, enhanced due diligence.", evasion: "Ensure all required licenses obtained and presented. Use transshipment through countries not requiring licenses for transit. Misclassify goods to avoid controlled lists." },
+            { num: 52, category: 4, categoryName: "Documentation", title: "Reused or slightly altered documents", description: "Reusing documents from previous transactions with minor changes.", detection: "Document fingerprinting creating searchable identifiers, similarity detection identifying high overlap, temporal analysis.", evasion: "Make substantial changes—alter quantities, parties, descriptions. Use different templates and formats. Ensure new documents sufficiently different to avoid fingerprint matches." },
+            { num: 53, category: 4, categoryName: "Documentation", title: "Documents lack key commercial details", description: "Invoices dated same day as transaction, lacking payment terms, order numbers, incoterms.", detection: "Completeness scoring checking for expected fields, temporal analysis comparing document dates to transaction dates, term extraction.", evasion: "Ensure invoices include all standard fields. Use professional invoicing software auto-populating fields. Avoid presenting documents looking hastily prepared." },
+            { num: 54, category: 5, categoryName: "Jurisdictional", title: "Trade with/involving FATF high-risk jurisdiction", description: "Involving parties in weak AML jurisdictions.", detection: "Jurisdiction risk scoring dynamically updated, automated screening of all parties/banks/routing points, enhanced monitoring.", evasion: "Use intermediary companies in lower-risk jurisdictions. Ensure high-risk party not named in documents—use nominee or agent. Route payments through correspondent banks in reputable countries." },
+            { num: 55, category: 5, categoryName: "Jurisdictional", title: "Unnecessary use of Free Trade Zones", description: "Routing goods through FTZs without economic reason.", detection: "FTZ involvement analysis flagging transactions where FTZ routing lacks rationale, physical verification, customs data integration.", evasion: "Provide commercial justification for FTZ use (warehousing, assembly, labeling). Use FTZs well-integrated into supply chain. Ensure FTZ entry and exit documented with customs entries." },
+            { num: 56, category: 5, categoryName: "Jurisdictional", title: "Shipment through transshipment hubs", description: "Routing cargo through major transshipment hubs to obscure origin/destination.", detection: "Route complexity scoring based on number of transshipment points, hub concentration analysis, end-to-end tracking.", evasion: "Use only one transshipment hub commonly used for that trade lane. Ensure bill of lading shows final destination clearly. Use hubs that are also major commercial centers." },
+            { num: 57, category: 5, categoryName: "Jurisdictional", title: "Payment routing through secrecy havens", description: "Routing payments through banks in secrecy jurisdictions unrelated to trade.", detection: "Payment path analysis mapping complete wire routes, jurisdiction relevance scoring flagging routing through countries with no connection, correspondent bank due diligence.", evasion: "Route payments through well-known international financial centers used for legitimate trade. Ensure routing banks are major institutions. Use multiple routing points so none stands out." },
+            { num: 58, category: 5, categoryName: "Jurisdictional", title: "Trade patterns inconsistent with country norms", description: "Shipping goods that don't match typical import/export profile.", detection: "Country trade profile integration using customs data, statistical anomaly detection, peer comparison.", evasion: "Ensure shipment within range of normal trade for country. Use specific end-users justifying import. Provide documentation explaining anomaly." },
+            { num: 59, category: 5, categoryName: "Jurisdictional", title: "Vessel AIS manipulation", description: "Turning off AIS to hide location/activities.", detection: "Real-time AIS monitoring, AIS gap analysis flagging unexplained interruptions, pattern recognition for repeated manipulation, satellite surveillance integration.", evasion: "Keep AIS on except in areas where it's common to turn off. If manipulation necessary, do for short periods in locations where gaps are common. Use spoofing to show false location." },
+            { num: 60, category: 5, categoryName: "Jurisdictional", title: "Re-filing after a bank refusal", description: "After refusal, resubmit same deal with changed origin/destination.", detection: "Transaction fingerprinting creating identifiers for key deal components, refusal tracking database, similarity detection.", evasion: "Change multiple elements—not just origin/destination but also goods description, value, parties. Use different bank for re-filing. Wait significant period (e.g., 6 months) before re-filing." },
+            { num: 61, category: 6, categoryName: "Typologies", title: "Over-invoicing", description: "Invoicing above market value to move excess value to seller.", detection: "Automated price benchmarking against market data, statistical price modeling, tolerance monitoring, peer comparison.", evasion: "Keep over-invoice within plausible range (10-20% above market) and justify with quality, brand, urgent delivery. Use commodities with wide price variations where valuation subjective." },
+            { num: 62, category: 6, categoryName: "Typologies", title: "Under-invoicing", description: "Invoicing below market value to move value to buyer.", detection: "Same benchmarking as over-invoicing, import/export value reconciliation between jurisdictions, duty evasion analysis.", evasion: "Keep deviation modest. Use quality differences to justify. Provide justification (seconds, damaged goods, promotional pricing). Ensure not so low as to trigger duty evasion algorithms." },
+            { num: 63, category: 6, categoryName: "Typologies", title: "Multiple invoicing", description: "Using same shipment documents to justify multiple payments.", detection: "Invoice fingerprinting, cross-institution data sharing, pattern detection, blockchain-based platforms.", evasion: "Use different invoice numbers, dates, slight variations in description for each presentation. Submit to banks in different countries with no data-sharing agreements." },
+            { num: 64, category: 6, categoryName: "Typologies", title: "Short-shipping (Under-shipment)", description: "Invoice declares more than shipped, buyer pays full amount.", detection: "Quantity verification through customs data/shipping records, weight-to-value analysis, physical inspection triggers, insurance verification.", evasion: "Ensure short-shipped quantity not easily detectable (ship 90% of declared). Use bulk commodities where exact quantity hard to verify. Have plausible explanation (spillage, evaporation)." },
+            { num: 65, category: 6, categoryName: "Typologies", title: "Over-shipment", description: "Shipping more than declared, buyer receives extra goods without paying.", detection: "Container utilization analysis comparing declared quantity to capacity, weight discrepancy detection, random inspection, X-ray scanning.", evasion: "Hide extra goods within container behind declared goods. Use double-stacked pallets or concealed compartments. Declare slightly higher weight accommodating extra goods. Target ports with low inspection rates." },
+            { num: 66, category: 6, categoryName: "Typologies", title: "Phantom Shipping (No-shipment)", description: "Documents for non-existent shipment.", detection: "Logistics data integration verifying against port records/carrier systems, vessel tracking, customs verification, insurance validation.", evasion: "Use real vessels and ports currently sailing. Create documents matching genuine voyage even if goods aren't on board. Obtain house bill of lading from freight forwarder. Purchase insurance policy." },
+            { num: 67, category: 6, categoryName: "Typologies", title: "False Description / Misclassification", description: "Misdescribing goods to hide true nature or value.", detection: "HS code validation using AI, dual-use screening, X-ray scanning, intelligence sharing.", evasion: "Choose description plausibly close to true goods. Use broad HS codes including many items. If physical inspection occurs, ensure exterior of packages matches declared description. Stay updated on scrutinized goods." }
+        ];
+
+        let currentCategory = 'all';
+        let searchTerm = '';
+
+        function renderRedFlags() {
+            const container = document.getElementById('redFlagsContainer');
+            const noResults = document.getElementById('noResults');
+            
+            let filteredFlags = redFlags;
+
+            if (currentCategory !== 'all') {
+                filteredFlags = filteredFlags.filter(flag => flag.category === parseInt(currentCategory));
+            }
+
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filteredFlags = filteredFlags.filter(flag => 
+                    flag.title.toLowerCase().includes(term) ||
+                    flag.description.toLowerCase().includes(term) ||
+                    flag.detection.toLowerCase().includes(term) ||
+                    flag.evasion.toLowerCase().includes(term) ||
+                    flag.categoryName.toLowerCase().includes(term)
+                );
+            }
+
+            document.getElementById('visibleFlags').textContent = filteredFlags.length;
+
+            if (filteredFlags.length === 0) {
+                container.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'grid';
+            noResults.style.display = 'none';
+
+            container.innerHTML = filteredFlags.map(flag => `
+                <div class="red-flag-card collapsed" data-flag="${flag.num}">
+                    <div class="red-flag-header">
+                        <div class="flag-number">Flag #${flag.num}</div>
+                        <div class="category-badge">${flag.categoryName}</div>
+                    </div>
+                    <div class="red-flag-title">${flag.title}</div>
+                    <div class="red-flag-section">
+                        <div class="section-label">Description</div>
+                        <div class="section-content">${flag.description}</div>
+                    </div>
+                    <div class="red-flag-section">
+                        <div class="section-label">Bank Detection Methodology</div>
+                        <div class="section-content">${flag.detection}</div>
+                    </div>
+                    <div class="red-flag-section">
+                        <div class="section-label">Criminal Evasion Tactics</div>
+                        <div class="section-content">${flag.evasion}</div>
+                    </div>
+                    <div class="expand-indicator">Click to toggle details</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.red-flag-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('collapsed');
+                    card.classList.toggle('expanded');
+                });
+            });
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentCategory = e.target.getAttribute('data-category');
+                renderRedFlags();
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderRedFlags();
+        });
+
+        renderRedFlags();
+    </script>
+</body>
+</html>
 
